@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,11 +20,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.sermaluc.bci.ejercicio.seguridad.JWTAuthorizationFilter;
 import com.sermaluc.bci.ejercicio.util.TablasH2;
 
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+
 @SpringBootApplication(exclude = HibernateJpaAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.sermaluc.bci.ejercicio"})
 public class EjercicioApplication extends SpringBootServletInitializer implements CommandLineRunner {
-	
-	@Autowired
+    
+    @Autowired
     private JdbcTemplate template;
 
     public static void main(String[] args) {
@@ -46,36 +52,33 @@ public class EjercicioApplication extends SpringBootServletInitializer implement
     }
 
     @EnableWebSecurity
-	@Configuration
-	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Configuration
+    class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.cors().and().csrf().disable()
-					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-					.authorizeRequests().antMatchers(HttpMethod.POST, "/user/logeo").permitAll().anyRequest()
-					.authenticated();
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            /*http.cors().and().csrf().disable()
+                    .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .authorizeRequests().antMatchers(HttpMethod.POST, "/user/logeo").permitAll().anyRequest()
+                    .authenticated();*/
 
-//			http.cors().and().csrf().disable() // TODO This might be modified in a future ticket.
-//					.authorizeRequests().antMatchers(HttpMethod.POST, publicUrlsPost.toArray(new String[0])).permitAll()
-//					.antMatchers(HttpMethod.POST, "/usuario/logeo").permitAll().anyRequest()
-//					.authenticated().and().exceptionHandling().authenticationEntryPoint(jwtEntryPoint).and()
-//					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//			http.addFilterBefore(jwtTokenAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            http.cors().and().csrf().disable()
+	            .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+	            .authorizeRequests()
+	            .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v2/api-docs/**", "/swagger-resources/**").permitAll()
+	            .antMatchers(HttpMethod.POST, "/user/logeo").permitAll()
+	            .anyRequest().authenticated();
 
-		}
-	}
-//        @Bean
-//	public WebMvcConfigurer getCorsConfiguration() {
-//		return new WebMvcConfigurer() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedHeaders("*")
-//						.allowedOrigins("http://localhost:4200").maxAge(3600);
-//				WebMvcConfigurer.super.addCorsMappings(registry);
-//			}
-//		};
-//
-//	}
+        }
+    }
 
+    // Configuración de Swagger
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.sermaluc.bci.ejercicio"))
+                .paths(PathSelectors.any())
+                .build();
+    }
 }

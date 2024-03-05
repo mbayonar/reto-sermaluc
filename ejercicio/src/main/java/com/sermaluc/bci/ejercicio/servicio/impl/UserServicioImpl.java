@@ -76,31 +76,47 @@ public class UserServicioImpl extends BaseServicioImpl<User, UUID> implements Us
 	        	phone.setUser(user);
 	        	this.phoneRepositorio.crear(phone);
 	        }
-	    	httpStatus = HttpStatus.CREATED;
-	    	logger.info("VALOR DE HTTP STATUS IF", httpStatus);
-	    	logger.info("ID OBTENDO = ", user.getId());
+	    	httpStatus = HttpStatus.OK;
 	        respuestaControlador = this.respuestaControladorServicio.obtenerRespuestaDeExitoCrearConData(NombreEntidadEnum.USER.getValor(), user);
     	} else {
         	httpStatus = HttpStatus.OK;
-        	logger.info("VALOR DE HTTP STATUS ELSE", httpStatus);
         	respuestaControlador = this.respuestaControladorServicio.obtenerRespuestaDeErrorCrearConMensaje(NombreEntidadEnum.USER.getValor(), mensajeError);
     	}
-    	logger.info("VALOR DE HTTP STATUS FINAL", httpStatus);
     	respuestaControlador.setCodeStatus(String.valueOf(httpStatus.value()));
     	return respuestaControlador;
     }
 
     public boolean validarUsuario(User user) {
-    	if (SistemaUtil.esNoNulo(obtenerPorCorreo(user.getEmail()))) {
-    		this.mensajeError = "El correo ya ha sido registrado anteriormente.";
+    	if (!validarCamposLlenos(user)) {
+    		this.mensajeError = "Campos incompletos. " + this.mensajeError;
     		return false;
     	}
     	if (!SistemaUtil.validarEmail(user.getEmail())) {
     		this.mensajeError = "Ingrese un correo válido.";
     		return false;
     	}
-    	if (!SistemaUtil.validarPassword(user.getPassword(), 6, 10)) {
+    	if (SistemaUtil.esNoNulo(obtenerPorCorreo(user.getEmail()))) {
+    		this.mensajeError = "El correo ya ha sido registrado anteriormente.";
+    		return false;
+    	}
+    	if (!SistemaUtil.validarPassword(user.getPassword())) {
     		this.mensajeError = "Ingrese una contraseña válida.";
+    		return false;
+    	}
+    	return true;
+    }
+
+    public boolean validarCamposLlenos(User user) {
+    	if (!SistemaUtil.esNoNulo(user.getName()) || SistemaUtil.esCadenaVacia(user.getName().trim())) {
+    		this.mensajeError = "No ha ingresado nombre.";
+    		return false;
+    	}
+    	if (!SistemaUtil.esNoNulo(user.getEmail()) || SistemaUtil.esCadenaVacia(user.getEmail().trim())) {
+    		this.mensajeError = "No ha ingresado correo.";
+    		return false;
+    	}
+    	if (!SistemaUtil.esNoNulo(user.getPassword()) || SistemaUtil.esCadenaVacia(user.getPassword().trim())) {
+    		this.mensajeError = "No ha ingresado contraseña.";
     		return false;
     	}
     	return true;
