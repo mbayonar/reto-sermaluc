@@ -1,5 +1,5 @@
-# sermaluc
-Reto Técnico para Sermaluc - BCI Chile
+# SmartJob
+Reto Técnico para SmartJob - BCI Chile
 
 # Indicaciones
 1. El script que está en la raíz es para tener una referencia, pues se está usando H2, una BD en memoria que se crea y se elimina cada vez que se ejecuta la aplicación

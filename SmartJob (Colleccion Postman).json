@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "bc890131-1deb-43d7-b0cf-67fbe6bd4a28",
+		"name": "SmartJob",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36731778",
+		"_collection_link": "https://cinepolis-api.postman.co/workspace/Team-Workspace~2ea9e20d-68aa-46a3-8eb6-35889f34ce16/collection/36731778-bc890131-1deb-43d7-b0cf-67fbe6bd4a28?action=share&source=collection_link&creator=36731778"
+	},
+	"item": [
+		{
+			"name": "Logeo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var token = responseBody.data.token;\r",
+							"\r",
+							"pm.environment.set(\"authToken\", token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "marcos280798br@gmail.com",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "marcosbr",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8091/user/logeo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"user",
+						"logeo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User - Listar todos",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8091/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User - Obtener",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8091/user/772fc8d8-363f-4e4c-8b42-b50b93e1779f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"user",
+						"772fc8d8-363f-4e4c-8b42-b50b93e1779f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User - Crear",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Juan Rodriguez\",\r\n    \"email\": \"juan@rodriguez.org\",\r\n    \"password\": \"hunter2\",\r\n    \"phones\": [\r\n        {\r\n        \"number\": \"1234567\",\r\n        \"citycode\": \"1\",\r\n        \"countrycode\": \"57\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8091/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User - Actualizar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"772fc8d8-363f-4e4c-8b42-b50b93e1779f\",\r\n    \"name\": \"Mariano Bayona Rijalba\",\r\n    \"email\": \"marcos280798br@gmail.com\",\r\n    \"password\": \"marcosbr\",\r\n    \"phones\": [\r\n        {\r\n        \"number\": \"947181319\",\r\n        \"citycode\": \"1\",\r\n        \"contrycode\": \"57\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8091/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User - Eliminar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8091/user/cadbb456-0f3d-4269-b218-206f9fd0daea",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"user",
+						"cadbb456-0f3d-4269-b218-206f9fd0daea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Phone - Listar todos",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8091/phone/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"phone",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Phone - Obtener",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8091/phone/853fb9e1-89aa-4a66-b9b8-7c762323a604",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"phone",
+						"853fb9e1-89aa-4a66-b9b8-7c762323a604"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
